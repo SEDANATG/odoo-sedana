@@ -42,8 +42,11 @@
             }
 
             .o_field_widget {
-                width: 100%;
                 margin-bottom: $o-form-spacing-unit * 2;
+
+                &:not(.o_field_boolean){
+                    width: 100%;
+                }
 
                 > .o_field_widget {
                     margin-bottom: 0;
@@ -487,9 +490,14 @@
     .o_checkbox_optional_field {
         display: flex;
 
-        @include media-breakpoint-down(md) {
+        @include media-breakpoint-down(sm) {
             flex-wrap: wrap;
-            justify-content: space-between;
+            .o_field_boolean {
+                order: -1;
+            }
+            .o_field_boolean + div {
+                width: 100%;
+            }
         }
 
         > .o_form_label {
@@ -589,6 +597,10 @@
                         }
                     }
                 }
+                // Prevent table overflow when having long chars in x2many list
+                .o_field_widget:has(.o_field_x2many.o_field_x2many_list) {
+                    width: 100%;
+                }
             }
         }
 
@@ -669,19 +681,25 @@
     }
 
     .oe_no_translation_content {
-        :not(.btn) {
-            display: none;
-        }
+        // hide content but show the translate button
+        height: 0px;
 
-        .btn {
-            width: 100% !important;
-            margin-left: 0px;
-            visibility: hidden;
-        }
+        div{
+            :not(.btn) {
+                display: none;
+            }
 
-        .btn:after {
-            content: 'EN';
-            visibility: visible;
+            .btn {
+                width: 100% !important;
+                margin-left: 0px;
+                visibility: hidden;
+            }
+
+            .btn:after {
+                // force the the translate button to EN
+                content: 'EN';
+                visibility: visible;
+            }
         }
     }
 
@@ -853,11 +871,9 @@
         }
     }
 
-    // Boolean
-    .o_field_boolean {
-        margin-right: $o-form-spacing-unit;
-        max-width: 40px !important;
-        padding-right: 0 !important;
+    // Boolean 
+    .o_field_boolean + .o_form_label {
+        margin-right: $o-form-spacing-unit * 3;
     }
 
     // Timezone widget warning
